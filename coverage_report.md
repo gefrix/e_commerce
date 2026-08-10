@@ -11,17 +11,18 @@ poetry run pytest --cov=src --cov=main --cov-report=term-missing
 Результат:
 
 ```text
-25 passed
+34 passed
 
-Name              Stmts   Miss  Cover   Missing
------------------------------------------------
-main.py              26      1    96%   53
-src/__init__.py       3      0   100%
-src/category.py      21      0   100%
-src/product.py       40      0   100%
-src/utils.py         31      0   100%
------------------------------------------------
-TOTAL               121      1    99%
+Name                       Stmts   Miss  Cover   Missing
+--------------------------------------------------------
+main.py                       18      1    94%   38
+src/__init__.py                3      0   100%
+src/category.py               34      0   100%
+src/category_iterator.py       2      0   100%
+src/product.py                46      0   100%
+src/utils.py                  31      0   100%
+--------------------------------------------------------
+TOTAL                        134      1    99%
 ```
 
 Требуемое покрытие функционального кода — более 75%. Фактическое покрытие — **99%**.

@@ -65,3 +65,14 @@ class Product:
                 return
 
         self.__price = normalized_price
+
+    def __str__(self) -> str:
+        """Return product details in the store display format."""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: object) -> float:
+        """Return the total stock value of two products."""
+        if not isinstance(other, Product):
+            raise TypeError("Products can only be added to other products")
+
+        return self.price * self.quantity + other.price * other.quantity

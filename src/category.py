@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
+
 from src.product import Product
 
 
@@ -36,6 +38,26 @@ class Category:
     @property
     def products(self) -> str:
         """Return all products formatted for display."""
-        return "".join(
-            f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n" for product in self.__products
-        )
+        return "".join(f"{product}\n" for product in self.__products)
+
+    def __str__(self) -> str:
+        """Return the category name and total stock quantity."""
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
+
+    def _iter_products(self) -> Iterator[Product]:
+        """Return an internal iterator without exposing the private list."""
+        return iter(self.__products)
+
+
+class CategoryIterator:
+    """Iterate over products stored in one category."""
+
+    def __init__(self, category: Category) -> None:
+        self._products = category._iter_products()
+
+    def __iter__(self) -> CategoryIterator:
+        return self
+
+    def __next__(self) -> Product:
+        return next(self._products)
