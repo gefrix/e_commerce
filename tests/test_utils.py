@@ -26,9 +26,9 @@ def test_create_objects_from_json_builds_domain_objects() -> None:
 
     assert len(categories) == 2
     assert all(isinstance(category, Category) for category in categories)
-    assert all(isinstance(product, Product) for category in categories for product in category.products)
-    assert categories[0].products[0].name == "Samsung Galaxy C23 Ultra"
-    assert categories[1].products[0].price == 123000.0
+    assert all(isinstance(product, Product) for category in categories for product in category._Category__products)
+    assert categories[0]._Category__products[0].name == "Samsung Galaxy C23 Ultra"
+    assert categories[1]._Category__products[0].price == 123000.0
     assert Category.category_count == 2
     assert Category.product_count == 4
 
@@ -37,7 +37,7 @@ def test_load_categories_from_json_combines_reading_and_conversion() -> None:
     categories = load_categories_from_json(PRODUCTS_PATH)
 
     assert [category.name for category in categories] == ["Смартфоны", "Телевизоры"]
-    assert [len(category.products) for category in categories] == [3, 1]
+    assert [category.products.count("Остаток:") for category in categories] == [3, 1]
 
 
 def test_read_json_rejects_non_list_root(tmp_path: Path) -> None:
