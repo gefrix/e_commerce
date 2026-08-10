@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 
 class Product:
@@ -72,7 +72,8 @@ class Product:
 
     def __add__(self, other: object) -> float:
         """Return the total stock value of two products."""
-        if not isinstance(other, Product):
-            raise TypeError("Products can only be added to other products")
+        if type(self) is not type(other):
+            raise TypeError("Products can only be added to other products of the same type")
 
-        return self.price * self.quantity + other.price * other.quantity
+        other_product = cast(Product, other)
+        return self.price * self.quantity + other_product.price * other_product.quantity

@@ -32,6 +32,9 @@ class Category:
 
     def add_product(self, product: Product) -> None:
         """Add a product to the private collection and update the counter."""
+        if not isinstance(product, Product):
+            raise TypeError("Only Product objects and their subclasses can be added to a category")
+
         self.__products.append(product)
         Category.product_count += 1
 
