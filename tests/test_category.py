@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from src.category import Category
 from src.product import Product
 
@@ -68,3 +70,12 @@ def test_empty_category_string_contains_zero_quantity() -> None:
     category = Category("Пустая категория", "Без товаров", [])
 
     assert str(category) == "Пустая категория, количество продуктов: 0 шт."
+
+
+def test_add_product_rejects_non_product(category: Category) -> None:
+    initial_count = Category.product_count
+
+    with pytest.raises(TypeError, match="Product objects"):
+        category.add_product("Not a product")  # type: ignore[arg-type]
+
+    assert Category.product_count == initial_count
