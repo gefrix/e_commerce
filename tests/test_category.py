@@ -58,3 +58,13 @@ def test_add_product_appends_product_and_updates_counter(category: Category) -> 
     assert result is None
     assert Category.product_count == 4
     assert category.products.endswith('55" QLED 4K, 123000.0 руб. Остаток: 7 шт.\n')
+
+
+def test_category_string_contains_total_stock_quantity(category: Category) -> None:
+    assert str(category) == "Смартфоны, количество продуктов: 27 шт."
+
+
+def test_empty_category_string_contains_zero_quantity() -> None:
+    category = Category("Пустая категория", "Без товаров", [])
+
+    assert str(category) == "Пустая категория, количество продуктов: 0 шт."

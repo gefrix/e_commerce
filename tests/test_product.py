@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
+import pytest
+
 from src.product import Product
 
 
@@ -129,3 +131,20 @@ def test_price_setter_rejects_non_positive_values(
         "Цена не должна быть нулевая или отрицательная\n" "Цена не должна быть нулевая или отрицательная\n"
     )
     assert smartphone.price == 180000.0
+
+
+def test_product_string_uses_required_format(smartphone: Product) -> None:
+    assert str(smartphone) == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+
+
+def test_product_addition_returns_total_stock_value() -> None:
+    first = Product("Product A", "Description", 100.0, 10)
+    second = Product("Product B", "Description", 200.0, 2)
+
+    assert first + second == 1400.0
+    assert second + first == 1400.0
+
+
+def test_product_addition_rejects_other_types(smartphone: Product) -> None:
+    with pytest.raises(TypeError, match="other products"):
+        _ = smartphone + 1
