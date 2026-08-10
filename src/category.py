@@ -11,7 +11,7 @@ class Category:
 
     name: str
     description: str
-    products: list[Product]
+    __products: list[Product]
 
     def __init__(
         self,
@@ -22,7 +22,20 @@ class Category:
         """Initialize a category and update the shared counters."""
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = []
 
         Category.category_count += 1
-        Category.product_count += len(products)
+        for product in products:
+            self.add_product(product)
+
+    def add_product(self, product: Product) -> None:
+        """Add a product to the private collection and update the counter."""
+        self.__products.append(product)
+        Category.product_count += 1
+
+    @property
+    def products(self) -> str:
+        """Return all products formatted for display."""
+        return "".join(
+            f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n" for product in self.__products
+        )
