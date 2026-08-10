@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from typing import Any, cast
 
+from src.base_product import BaseProduct
+from src.mixins import CreationInfoMixin
 
-class Product:
+
+class Product(CreationInfoMixin, BaseProduct):
     """A product available in the online store."""
 
     name: str
@@ -17,12 +20,14 @@ class Product:
         description: str,
         price: float,
         quantity: int,
+        *creation_args: object,
     ) -> None:
         """Initialize a product with its descriptive and stock data."""
         self.name = name
         self.description = description
         self.__price = float(price)
         self.quantity = int(quantity)
+        super().__init__(name, description, price, quantity, *creation_args)
 
     @classmethod
     def new_product(

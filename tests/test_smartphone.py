@@ -24,6 +24,7 @@ def smartphone() -> Smartphone:
 def test_smartphone_inherits_product(smartphone: Smartphone) -> None:
     assert isinstance(smartphone, Product)
     assert issubclass(Smartphone, Product)
+    assert Smartphone.__bases__ == (Product,)
 
 
 def test_smartphone_initialization(smartphone: Smartphone) -> None:

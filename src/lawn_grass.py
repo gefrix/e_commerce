@@ -16,7 +16,15 @@ class LawnGrass(Product):
         germination_period: str,
         color: str,
     ) -> None:
-        super().__init__(name, description, price, quantity)
+        super().__init__(
+            name,
+            description,
+            price,
+            quantity,
+            country,
+            germination_period,
+            color,
+        )
         self.country = country
         self.germination_period = germination_period
         self.color = color

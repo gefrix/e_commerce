@@ -123,6 +123,7 @@ def test_price_setter_rejects_non_positive_values(
     smartphone: Product,
     capsys: object,
 ) -> None:
+    capsys.readouterr()  # type: ignore[attr-defined]
     smartphone.price = -100.0
     smartphone.price = 0.0
 
