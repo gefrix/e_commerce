@@ -29,10 +29,19 @@ def test_order_initialization(smartphone: Product) -> None:
     assert str(order) == "Заказ: Samsung Galaxy S23 Ultra, количество: 2 шт., стоимость: 360000.0 руб."
 
 
-@pytest.mark.parametrize("quantity", [0, -1])
-def test_order_rejects_non_positive_quantity(smartphone: Product, quantity: int) -> None:
+def test_order_rejects_zero_quantity(smartphone: Product, capsys: object) -> None:
+    capsys.readouterr()  # type: ignore[attr-defined]
+
+    with pytest.raises(ValueError, match="^Товар с нулевым количеством не может быть добавлен$"):
+        Order(smartphone, 0)
+
+    output = capsys.readouterr().out  # type: ignore[attr-defined]
+    assert output == ("Товар с нулевым количеством не может быть добавлен\n" "Обработка добавления товара завершена\n")
+
+
+def test_order_rejects_negative_quantity(smartphone: Product) -> None:
     with pytest.raises(ValueError, match="positive"):
-        Order(smartphone, quantity)
+        Order(smartphone, -1)
 
 
 def test_order_rejects_non_product() -> None:

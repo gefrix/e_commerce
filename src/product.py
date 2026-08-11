@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any, cast
 
 from src.base_product import BaseProduct
+from src.exceptions import ZeroQuantityError
 from src.mixins import CreationInfoMixin
 
 
@@ -23,10 +24,14 @@ class Product(CreationInfoMixin, BaseProduct):
         *creation_args: object,
     ) -> None:
         """Initialize a product with its descriptive and stock data."""
+        normalized_quantity = int(quantity)
+        if normalized_quantity == 0:
+            raise ZeroQuantityError
+
         self.name = name
         self.description = description
         self.__price = float(price)
-        self.quantity = int(quantity)
+        self.quantity = normalized_quantity
         super().__init__(name, description, price, quantity, *creation_args)
 
     @classmethod

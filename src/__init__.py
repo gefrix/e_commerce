@@ -3,6 +3,7 @@
 from src.base_entity import BaseEntity
 from src.base_product import BaseProduct
 from src.category import Category, CategoryIterator
+from src.exceptions import ZeroProductQuantityError, ZeroQuantityError
 from src.lawn_grass import LawnGrass
 from src.mixins import CreationInfoMixin, MixinLog
 from src.order import Order
@@ -20,4 +21,6 @@ __all__ = [
     "Order",
     "Product",
     "Smartphone",
+    "ZeroProductQuantityError",
+    "ZeroQuantityError",
 ]
