@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 
 from src.base_entity import BaseEntity
+from src.exceptions import ZeroQuantityError
 from src.product import Product
 
 
@@ -36,8 +37,17 @@ class Category(BaseEntity):
         if not isinstance(product, Product):
             raise TypeError("Only Product objects and their subclasses can be added to a category")
 
-        self.__products.append(product)
-        Category.product_count += 1
+        try:
+            if product.quantity == 0:
+                raise ZeroQuantityError
+        except ZeroQuantityError as error:
+            print(error)
+        else:
+            self.__products.append(product)
+            Category.product_count += 1
+            print("Товар успешно добавлен")
+        finally:
+            print("Обработка добавления товара завершена")
 
     @property
     def products(self) -> str:
@@ -57,6 +67,13 @@ class Category(BaseEntity):
     def total_cost(self) -> float:
         """Return the total stock value of all products in the category."""
         return sum(product.price * product.quantity for product in self.__products)
+
+    def middle_price(self) -> float:
+        """Return the average price of products or zero for an empty category."""
+        try:
+            return sum(product.price for product in self.__products) / len(self.__products)
+        except ZeroDivisionError:
+            return 0.0
 
     def _iter_products(self) -> Iterator[Product]:
         """Return an internal iterator without exposing the private list."""

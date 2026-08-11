@@ -62,6 +62,30 @@ def test_add_product_appends_product_and_updates_counter(category: Category) -> 
     assert category.products.endswith('55" QLED 4K, 123000.0 руб. Остаток: 7 шт.\n')
 
 
+def test_add_product_reports_success_and_completion(category: Category, capsys: object) -> None:
+    product = Product("Чехол", "Прозрачный", 1500.0, 10)
+    capsys.readouterr()  # type: ignore[attr-defined]
+
+    category.add_product(product)
+
+    output = capsys.readouterr().out  # type: ignore[attr-defined]
+    assert output == "Товар успешно добавлен\nОбработка добавления товара завершена\n"
+
+
+def test_add_product_handles_zero_quantity(category: Category, capsys: object) -> None:
+    product = Product("Чехол", "Прозрачный", 1500.0, 10)
+    product.quantity = 0
+    initial_count = Category.product_count
+    capsys.readouterr()  # type: ignore[attr-defined]
+
+    category.add_product(product)
+
+    output = capsys.readouterr().out  # type: ignore[attr-defined]
+    assert output == ("Товар с нулевым количеством не может быть добавлен\n" "Обработка добавления товара завершена\n")
+    assert "Чехол" not in category.products
+    assert Category.product_count == initial_count
+
+
 def test_category_string_contains_total_stock_quantity(category: Category) -> None:
     assert str(category) == "Смартфоны, количество продуктов: 27 шт."
     assert category.total_quantity == 27
@@ -72,6 +96,16 @@ def test_empty_category_string_contains_zero_quantity() -> None:
     category = Category("Пустая категория", "Без товаров", [])
 
     assert str(category) == "Пустая категория, количество продуктов: 0 шт."
+
+
+def test_middle_price_returns_average_product_price(category: Category) -> None:
+    assert category.middle_price() == pytest.approx((180000.0 + 210000.0 + 31000.0) / 3)
+
+
+def test_middle_price_returns_zero_for_empty_category() -> None:
+    category = Category("Пустая категория", "Без товаров", [])
+
+    assert category.middle_price() == 0
 
 
 def test_add_product_rejects_non_product(category: Category) -> None:

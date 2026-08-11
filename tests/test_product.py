@@ -21,6 +21,11 @@ def test_product_uses_numeric_attribute_types() -> None:
     assert isinstance(product.quantity, int)
 
 
+def test_product_rejects_zero_quantity() -> None:
+    with pytest.raises(ValueError, match="^Товар с нулевым количеством не может быть добавлен$"):
+        Product("Бракованный товар", "Неверное количество", 1000.0, 0)
+
+
 def test_price_is_private(smartphone: Product) -> None:
     assert not hasattr(smartphone, "__price")
     assert smartphone._Product__price == 180000.0

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from src.base_entity import BaseEntity
+from src.exceptions import ZeroQuantityError
 from src.product import Product
 
 
@@ -10,12 +11,23 @@ class Order(BaseEntity):
     def __init__(self, product: Product, quantity: int) -> None:
         if not isinstance(product, Product):
             raise TypeError("An order can contain only a Product object")
-        if quantity <= 0:
-            raise ValueError("Order quantity must be positive")
 
-        self.product = product
-        self.quantity = int(quantity)
-        self.total_price = product.price * self.quantity
+        normalized_quantity = int(quantity)
+        try:
+            if product.quantity == 0 or normalized_quantity == 0:
+                raise ZeroQuantityError
+            if normalized_quantity < 0:
+                raise ValueError("Order quantity must be positive")
+        except ZeroQuantityError as error:
+            print(error)
+            raise
+        else:
+            self.product = product
+            self.quantity = normalized_quantity
+            self.total_price = product.price * self.quantity
+            print("Товар успешно добавлен")
+        finally:
+            print("Обработка добавления товара завершена")
 
     @property
     def total_quantity(self) -> int:
