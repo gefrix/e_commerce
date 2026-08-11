@@ -64,6 +64,8 @@ def test_add_product_appends_product_and_updates_counter(category: Category) -> 
 
 def test_category_string_contains_total_stock_quantity(category: Category) -> None:
     assert str(category) == "Смартфоны, количество продуктов: 27 шт."
+    assert category.total_quantity == 27
+    assert category.total_cost == 3014000.0
 
 
 def test_empty_category_string_contains_zero_quantity() -> None:

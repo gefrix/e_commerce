@@ -22,6 +22,7 @@ def lawn_grass() -> LawnGrass:
 def test_lawn_grass_inherits_product(lawn_grass: LawnGrass) -> None:
     assert isinstance(lawn_grass, Product)
     assert issubclass(LawnGrass, Product)
+    assert LawnGrass.__bases__ == (Product,)
 
 
 def test_lawn_grass_initialization(lawn_grass: LawnGrass) -> None:

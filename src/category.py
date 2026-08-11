@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 
+from src.base_entity import BaseEntity
 from src.product import Product
 
 
-class Category:
+class Category(BaseEntity):
     """A product category with counters shared by all category objects."""
 
     category_count: int = 0
@@ -45,8 +46,17 @@ class Category:
 
     def __str__(self) -> str:
         """Return the category name and total stock quantity."""
-        total_quantity = sum(product.quantity for product in self.__products)
-        return f"{self.name}, количество продуктов: {total_quantity} шт."
+        return f"{self.name}, количество продуктов: {self.total_quantity} шт."
+
+    @property
+    def total_quantity(self) -> int:
+        """Return the total number of product units in the category."""
+        return sum(product.quantity for product in self.__products)
+
+    @property
+    def total_cost(self) -> float:
+        """Return the total stock value of all products in the category."""
+        return sum(product.price * product.quantity for product in self.__products)
 
     def _iter_products(self) -> Iterator[Product]:
         """Return an internal iterator without exposing the private list."""
